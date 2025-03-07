@@ -11,7 +11,6 @@ const MarketingPage = () => {
       >
         <Heading />
         <Heroes />
-     
       </div>
       <Footer />
     </div>
