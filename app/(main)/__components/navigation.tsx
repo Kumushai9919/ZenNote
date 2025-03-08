@@ -10,7 +10,7 @@ import {
   Plus,
   Trash,
 } from "lucide-react";
-import { useParams, usePathname } from "next/navigation";
+import { useParams, usePathname, useRouter } from "next/navigation";
 import { ElementRef, useEffect, useRef, useState } from "react";
 import { useMediaQuery } from "usehooks-ts";
 import { UserItem } from "./user-item";
@@ -36,6 +36,7 @@ export const Navigation = () => {
   const params = useParams();
   const isMobile = useMediaQuery("(max-width: 768px)");
   const create = useMutation(api.documents.create);
+  const router = useRouter();
 
   const isResizingRef = useRef(false);
   const sidebarRef = useRef<HTMLElement>(null);
@@ -121,7 +122,9 @@ export const Navigation = () => {
   };
 
   const handleCreate = () => {
-    const promise = create({ title: "Untitled" });
+    const promise = create({ title: "Untitled" }).then((documentId) => {
+      router.push(`/documents/${documentId}`);
+    });
 
     toast.promise(promise, {
       loading: "Creating note...",
@@ -160,17 +163,29 @@ export const Navigation = () => {
         <div className="mt-4">
           <DocumentList />
           <Item onClick={handleCreate} icon={Plus} label="Add a page" />
-          <Popover>
+          <Popover onOpenChange={(open) => !open || search.isOpen}>
+            <PopoverTrigger className="w-full mt-4">
+              <Item icon={Trash} label="Trash" />
+            </PopoverTrigger>
+            <PopoverContent
+              className="p-0 w-72"
+              side={isMobile ? "bottom" : "right"}
+            >
+              <TrashBox />
+            </PopoverContent>
+          </Popover>
+          {/* <Popover>
             <PopoverTrigger className="w-full mt-4">
               <Item icon={Trash} label="Trash" />
               <PopoverContent
                 className="p-0 w-72"
                 side={isMobile ? "bottom" : "right"}
+           
               >
                 <TrashBox />
               </PopoverContent>
             </PopoverTrigger>
-          </Popover>
+          </Popover> */}
         </div>
 
         <div

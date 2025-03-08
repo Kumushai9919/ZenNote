@@ -7,13 +7,18 @@ import { PlusCircle } from "lucide-react";
 import { useMutation } from "convex/react";
 import { api } from "@/convex/_generated/api";
 import { toast } from "sonner";
+import { useRouter } from "next/navigation";
 
 const DocumentsPage = () => {
   const { user } = useUser();
+  const router = useRouter();
   const create = useMutation(api.documents.create);
 
   const onCreate = () => {
-    const promise = create({ title: "Untitled" });
+    const promise = create({ title: "Untitled" })
+    .then((documentId) => {
+        router.push(`/documents/${documentId}`);
+    })
 
     toast.promise(promise, {
       loading: "Creating note...",
@@ -39,7 +44,7 @@ const DocumentsPage = () => {
         className="hidden dark:block"
       />
 
-      <h2 className="text-lg font-medium">
+      <h2 className="text-lg font-medium mt-10 mb-4">
         Welcome to {user?.firstName}&apos;s ZenNote
       </h2>
       <Button onClick={onCreate}>

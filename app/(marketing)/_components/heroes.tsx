@@ -18,7 +18,7 @@ export const Heroes = () => {
             className="object-contain hidden dark:block"
           />
         </div>
-        <div className="relative h-[220px] w-[220px] hidden md:block mt-10">
+        <div className="relative h-[220px] w-[220px] hidden md:block mt-20">
         <Image
             src="/reading.png"
             fill
