@@ -8,9 +8,9 @@ import {
   Search,
   Settings,
   Plus,
-  Trash
+  Trash,
 } from "lucide-react";
-import { usePathname } from "next/navigation";
+import { useParams, usePathname } from "next/navigation";
 import { ElementRef, useEffect, useRef, useState } from "react";
 import { useMediaQuery } from "usehooks-ts";
 import { UserItem } from "./user-item";
@@ -19,15 +19,21 @@ import { useMutation, useQuery } from "convex/react";
 import { Item } from "./item";
 import { toast } from "sonner";
 import { DocumentList } from "./document-list";
-import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
 import { TrashBox } from "./trash-box";
 import { useSearch } from "@/hooks/use-search";
 import { useSettings } from "@/hooks/use-settings";
+import { Navbar } from "./navbar";
 
 export const Navigation = () => {
-  const search = useSearch()
+  const search = useSearch();
   const settings = useSettings();
   const pathname = usePathname();
+  const params = useParams();
   const isMobile = useMediaQuery("(max-width: 768px)");
   const create = useMutation(api.documents.create);
 
@@ -44,6 +50,7 @@ export const Navigation = () => {
       resetWidth();
     }
   }, [isMobile]);
+  console.log({ isCollapsed, isMobile });
 
   useEffect(() => {
     if (isMobile) {
@@ -155,14 +162,13 @@ export const Navigation = () => {
           <Item onClick={handleCreate} icon={Plus} label="Add a page" />
           <Popover>
             <PopoverTrigger className="w-full mt-4">
-              <Item icon={Trash} label="Trash"/>
+              <Item icon={Trash} label="Trash" />
               <PopoverContent
-               className="p-0 w-72"
-               side={isMobile ? "bottom" : "right"}
+                className="p-0 w-72"
+                side={isMobile ? "bottom" : "right"}
               >
                 <TrashBox />
               </PopoverContent>
-
             </PopoverTrigger>
           </Popover>
         </div>
@@ -183,15 +189,19 @@ export const Navigation = () => {
           isMobile && "left-0 w-full"
         )}
       >
-        <nav className="bg-transparent px-3 py-2 w-full">
-          {isCollapsed && (
-            <MenuIcon
-              role="button"
-              className="h-6 w-6 text-muted-foreground"
-              onClick={resetWidth}
-            />
-          )}
-        </nav>
+        {!!params.documentId ? (
+          <Navbar isCollapsed={isCollapsed} onResetWidth={resetWidth} />
+        ) : (
+          <nav className="bg-transparent px-3 py-2 w-full">
+            {isCollapsed && (
+              <MenuIcon
+                role="button"
+                className="h-6 w-6 text-muted-foreground"
+                onClick={resetWidth}
+              />
+            )}
+          </nav>
+        )}
       </div>
     </>
   );
