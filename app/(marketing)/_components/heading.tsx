@@ -1,7 +1,7 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
-import { Spinner } from "@/components/ui/spinner";
+import { Spinner } from "@/components/spinner";
 import { useConvexAuth } from "convex/react";
 import { SignInButton } from "@clerk/clerk-react";
 import { ArrowRight } from "lucide-react";
@@ -13,10 +13,10 @@ export const Heading = () => {
     <div className="max-w-3xl space-y-4">
       <h1 className="text-3xl sm:text-5xl md:text-6xl font-bold">
         Where Ideas Come to Life. Welcome to
-        <span className="underline"> Potion</span>
+        <span className="underline"> ZenNote</span>
       </h1>
       <h3 className="text-base sm:text-xl md:text-2xl font-medium">
-        Potion is the connected workspace where <br />
+      ZenNote is the connected workspace where <br />
         your thoughts become creative
       </h3>
       {isLoading && (
@@ -27,7 +27,7 @@ export const Heading = () => {
       {isAuthenticated && !isLoading && (
         <Button asChild>
           <Link href="/documents">
-            Enter Potion <span> 🧪</span>
+            Enter ZenNote <span> 🧪</span>
             {/* <ArrowRight className="h-4 w-4 ml-2" /> */}
           </Link>
         </Button>
@@ -36,7 +36,7 @@ export const Heading = () => {
       {!isAuthenticated && !isLoading && (
         <SignInButton mode="modal">
           <Button>
-            Get Potion free<span> 🧪</span>
+            Get ZenNote free<span> 🧪</span>
           </Button>
         </SignInButton>
       )}

@@ -7,7 +7,7 @@ import { SignInButton, UserButton } from "@clerk/clerk-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { Logo } from "./logo";
-import { Spinner } from "@/components/ui/spinner";
+import { Spinner } from "@/components/spinner";
 import Link from "next/link";
 
 export const Navbar = () => {
@@ -32,14 +32,14 @@ export const Navbar = () => {
               </Button>
             </SignInButton>
             <SignInButton mode="modal">
-              <Button size="sm">Get Potion free</Button>
+              <Button size="sm">Get ZenNote free</Button>
             </SignInButton>
           </>
         )}
         {isAuthenticated && !isLoading && (
           <>
             <Button variant="ghost" size="sm" asChild>
-              <Link href="/documents">Enter Potion</Link>
+              <Link href="/documents">Enter ZenNote</Link>
             </Button>
             <UserButton afterSignOutUrl="/" />
           </>
