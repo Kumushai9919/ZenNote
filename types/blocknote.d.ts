@@ -1,4 +1,3 @@
 declare module "@blocknote/mantine" {
-    export * from "@blocknote/core";
-  }
-  
+  export * from "@blocknote/core";
+}
