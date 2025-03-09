@@ -2,12 +2,13 @@
 
 import { useEffect } from "react";
 import { PartialBlock } from "@blocknote/core";
-import { BlockNoteView } from "@blocknote/mantine";
+import { BlockNoteView } from "@blocknote/shadcn";
 import { useCreateBlockNote } from "@blocknote/react";
 import "@blocknote/core/fonts/inter.css";
 import "@blocknote/mantine/style.css";
 import { useTheme } from "next-themes";
 import { useEdgeStore } from "@/lib/edgestore";
+import "@blocknote/shadcn/style.css";
 
 interface EditorProps {
   onChange: (value: string) => void;
@@ -51,7 +52,7 @@ interface EditorProps {
       editor.onChange(handleChange);
 
       return () => {
-        editor.off("change", handleChange);
+        editor.off('create', handleChange);
       };
     }
   }, [editor, onChange]);
@@ -60,14 +61,17 @@ interface EditorProps {
     <div>
       <BlockNoteView
         editor={editor}
+        shadCNComponents={{
+          
+        }}
         theme={resolvedTheme === "dark" ? "dark" : "light"}
         onChange={() =>
           onChange(JSON.stringify(editor.topLevelBlocks, null, 2))
         }
       />
-      {!editable && (
+      {/* {!editable && (
         <div className="absolute inset-0 bg-transparent cursor-not-allowed" />
-      )}
+      )} */}
     </div>
   ); 
 };
