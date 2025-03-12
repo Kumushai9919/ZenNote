@@ -224,19 +224,20 @@ export const getSearch = query({
 export const getById = query({
   args: { documentId: v.id("documents") },
   handler: async (ctx, args) => {
-    const identity = await ctx.auth.getUserIdentity();
-    if (!identity) {
-      throw new Error("Unauthenticated");
-    }
-
     const document = await ctx.db.get(args.documentId);
 
     if (!document) {
       throw new Error("Document not found");
     }
-
+    // ✅ Allow public access to published, non-archived documents
     if (document.isPublished && !document.isArchived) {
       return document;
+    }
+
+    // 🔐 Check authentication only for private documents
+    const identity = await ctx.auth.getUserIdentity();
+    if (!identity) {
+      throw new Error("Unauthenticated");  // ❌ Only block private documents
     }
 
     const userId = identity.subject;
@@ -247,7 +248,6 @@ export const getById = query({
     return document;
   },
 });
-
 
 //updating the document
 export const update = mutation({
@@ -267,9 +267,9 @@ export const update = mutation({
 
     const userId = identity.subject;
 
-    const {id, ...rest} = args;
-     
-    const existingDocument = await ctx.db.get(args. id);
+    const { id, ...rest } = args;
+
+    const existingDocument = await ctx.db.get(args.id);
 
     if (!existingDocument) {
       throw new Error("Document not found");
@@ -280,9 +280,9 @@ export const update = mutation({
     }
 
     const document = await ctx.db.patch(args.id, {
-      ...rest
-    })
- 
+      ...rest,
+    });
+
     return document;
   },
 });
@@ -306,11 +306,10 @@ export const removeIcon = mutation({
 
     const document = await ctx.db.patch(args.id, { icon: undefined });
     return document;
-  }
+  },
+});
 
-})
-
-export const removeCoverImage = mutation({  
+export const removeCoverImage = mutation({
   args: { id: v.id("documents") },
   handler: async (ctx, args) => {
     const identity = await ctx.auth.getUserIdentity();
@@ -329,5 +328,5 @@ export const removeCoverImage = mutation({
 
     const document = await ctx.db.patch(args.id, { coverImage: undefined });
     return document;
-  }
-})
+  },
+});
