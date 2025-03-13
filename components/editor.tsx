@@ -57,13 +57,12 @@ const Editor = ({ onChange, initialContent, editable = true }: EditorProps) => {
     <div>
       <BlockNoteView
         editor={editor}
-        shadCNComponents={{}}
         theme={resolvedTheme === "dark" ? "dark" : "light"}
         onChange={() =>
           onChange(JSON.stringify(editor.topLevelBlocks, null, 2))
         }
         style={{
-          backgroundColor: `var(--background)`,
+          backgroundColor: `var(--popover)`, 
           color: `var(--foreground)`,
         }}
       />

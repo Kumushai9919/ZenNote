@@ -14,4 +14,12 @@ export default defineSchema({
   })
     .index("by_user", ["userId"])
     .index("by_user_parent", ["userId", "parentDocument"]),
+  
+  // ✅ New `todos` table
+  todos: defineTable({
+    userId: v.string(), // User who owns the task
+    task: v.string(), // Task text
+    completed: v.boolean(), // Is task done?
+    createdAt: v.number(), // Timestamp for sorting
+  }).index("by_user", ["userId"]),
 });

@@ -68,20 +68,6 @@ export const getSidebar = query({
   },
 });
 
-// export const get = query({
-//   handler: async (ctx) => {
-//     const identity = await ctx.auth.getUserIdentity();
-
-//     if (!identity) {
-//       throw new Error("Unauthenticated");
-//     }
-
-//     const documents = await ctx.db.query("documents").collect();
-
-//     return documents;
-//   },
-// });
-
 export const create = mutation({
   args: {
     title: v.string(),
@@ -173,10 +159,7 @@ export const restore = mutation({
 
     recursiveRestore(args.id);
     return document;
-
-    // const document = await ctx.db.patch(args.id, { isArchived: false });
-    // recursiveRestore(args.id);
-    // return document;
+ 
   },
 });
 
@@ -237,7 +220,7 @@ export const getById = query({
     // 🔐 Check authentication only for private documents
     const identity = await ctx.auth.getUserIdentity();
     if (!identity) {
-      throw new Error("Unauthenticated");  // ❌ Only block private documents
+      throw new Error("Unauthenticated"); // ❌ Only block private documents
     }
 
     const userId = identity.subject;
