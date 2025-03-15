@@ -101,13 +101,13 @@ export const TrashBox = () => {
                   role="button"
                   className="rounded-sm p-2 hover:text-neutral-200 dark:hover:text-neutral-600"
                 >
-                  <Trash className="h-4 w-4 text-muted-foreground" />
+                  <Trash className="h-4 w-4 text-muted-foreground " />
                 </div>
               </ConfirmModal>
             </div>
           </div>
         ))}
-      </div>
+      </div>  
     </div>
   );
 };

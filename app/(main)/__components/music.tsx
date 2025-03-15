@@ -2,7 +2,12 @@
 
 import { useEffect, useState } from "react";
 import axios from "axios";
-import { IoPlaySkipForward, IoPlaySkipBack, IoShuffle, IoResize } from "react-icons/io5";
+import {
+  IoPlaySkipForward,
+  IoPlaySkipBack,
+  IoShuffle,
+  IoResize,
+} from "react-icons/io5";
 
 // ✅ Get access token from API route
 const getAccessToken = async () => {
@@ -39,6 +44,7 @@ const Music = () => {
   const [playlists, setPlaylists] = useState<any[]>([]);
   const [selectedPlaylist, setSelectedPlaylist] = useState<any | null>(null);
   const [loading, setLoading] = useState(true);
+  const [iframeLoading, setIframeLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [currentPlaylistIndex, setCurrentPlaylistIndex] = useState(0);
   const [sidebarSmall, setSidebarSmall] = useState(false);
@@ -117,9 +123,6 @@ const Music = () => {
     <div className="p-4 bg-neutral-800 rounded-md">
       <h3 className="text-md font-semibold text-white">Spotify Music</h3>
 
-     
-      
-
       <div className="flex flex-col items-center gap-4 mb-2 w-full">
         {/* ✅ Playlist Dropdown */}
         <select
@@ -129,6 +132,7 @@ const Music = () => {
             const index = playlists.findIndex((p) => p.id === e.target.value);
             setSelectedPlaylist(playlist);
             setCurrentPlaylistIndex(index);
+            setIframeLoading(true); // Set iframe loading state to true when changing playlist
           }}
           className=" w-full sm:w-auto bg-white/10 text-white rounded px-2 py-1 max-w-[200px] overflow-visible mt-2"
         >
@@ -168,21 +172,30 @@ const Music = () => {
 
       {/* ✅ Spotify iFrame */}
       {selectedPlaylist && (
-        <iframe
-          src={`https://open.spotify.com/embed/playlist/${selectedPlaylist.id}?utm_source=generator&theme=0`}
-          width="100%"
-          height="80"
-          frameBorder="0"
-          allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
-          loading="lazy"
-          className="rounded-xl bg-muted-foreground"
-        />
-      )}
-        <div className="flex items-center gap-2 text-[#B03052] text-sm mt-3">
-          <IoResize className="w-5 h-5" />
-          <span>Expand the sidebar to view full player</span>
+        <div className="relative w-full">
+          {iframeLoading && (
+            <div className="absolute inset-0 flex items-center justify-center bg-neutral-800 rounded-xl">
+              <div className="text-white">Loading player...</div>
+            </div>
+          )}
+          <iframe
+            src={`https://open.spotify.com/embed/playlist/${selectedPlaylist.id}?utm_source=generator&theme=0`}
+            width="100%"
+            height="80"
+            frameBorder="0"
+            allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
+            loading="lazy"
+            className={`rounded-xl ${
+              iframeLoading ? "opacity-0" : "opacity-100"
+            }`}
+            onLoad={() => setIframeLoading(false)} // Set iframe loading state to false when iframe is loaded
+          />
         </div>
- 
+      )}
+      <div className="flex items-center gap-2 text-[#B03052] text-sm mt-3">
+        <IoResize className="w-5 h-5" />
+        <span>Expand the sidebar to view full player</span>
+      </div>
     </div>
   );
 };
