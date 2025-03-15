@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useFocusMode } from "@/hooks/use-focus-mode";
 import {
   Play,
@@ -27,6 +27,7 @@ const gradients = [
 
 const FocusMode = () => {
   const focusMode = useFocusMode();
+  const inputRef = useRef<HTMLInputElement>(null);
   const [background, setBackground] = useState("");
   const [showAllTodos, setShowAllTodos] = useState(false);
 
@@ -67,6 +68,19 @@ const FocusMode = () => {
       setNewTask("");
     }
   };
+
+  // ✅ Listen for Enter Key when the input is focused
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Enter" && document.activeElement === inputRef.current) {
+        e.preventDefault();
+        handleAddTask();
+      }
+    };
+
+    document.addEventListener("keydown", handleKeyDown);
+    return () => document.removeEventListener("keydown", handleKeyDown);
+  }, [handleAddTask]);
 
   return (
     <div className="relative w-full p-4 rounded-md shadow-md">
@@ -187,19 +201,15 @@ const FocusMode = () => {
           {/* ✅ Input for New Tasks */}
           <div className="flex space-x-2 mt-3 ">
             <input
+              ref={inputRef}
               type="text"
               placeholder="New task..."
               value={newTask}
               onChange={(e) => setNewTask(e.target.value)}
-              className=" text-sm w-full p-2 text-white border-b border-white/15 focus:border-white focus:outline-none"
+              className="text-sm w-full p-2 text-white border-b border-white/15 focus:border-white focus:outline-none"
             />
             <button
               onClick={handleAddTask}
-              onKeyDown={(e) => {
-                if (e.key === "Enter") {
-                  handleAddTask();
-                }
-              }}
               className=" px-4 py-2 rounded-lg text-white flex items-center"
             >
               <PlusCircle className="w-4 h-4 mr-1" /> Add

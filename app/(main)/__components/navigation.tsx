@@ -212,8 +212,8 @@ export const Navigation = () => {
           <DocumentList />
           <Item onClick={handleCreate} icon={Plus} label="Add a page" />
           <Popover onOpenChange={(open) => !open || search.isOpen}>
-            <PopoverTrigger className="w-full mt-4">
-              <Item icon={Trash} label="Trash" />
+            <PopoverTrigger className="w-full mt-4 ">
+              <Item icon={Trash}  label="Trash" />
             </PopoverTrigger>
             <PopoverContent
               className="p-0 w-72"
