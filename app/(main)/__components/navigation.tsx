@@ -5,7 +5,8 @@ import {
   ChevronsLeft,
   MenuIcon,
   PlusCircle,
-  Search,
+  Search, 
+  Music2,
   Settings,
   Plus,
   Trash,
@@ -33,11 +34,14 @@ import { useSettings } from "@/hooks/use-settings";
 import { Navbar } from "./navbar";
 import { useFocusMode } from "@/hooks/use-focus-mode";
 import FocusMode from "./focusmode";
+import { useMusic } from "@/hooks/music";
+import Music from "./music";
 
 export const Navigation = () => {
   const search = useSearch();
   const settings = useSettings();
   const focusMode = useFocusMode();
+  const music = useMusic();
   const pathname = usePathname();
   const params = useParams();
   const isMobile = useMediaQuery("(max-width: 768px)");
@@ -169,17 +173,36 @@ export const Navigation = () => {
           >
             <div className="flex items-center text-sm">
               <Timer className="h-5 w-5 text-[#B03052]" />
-              <span className="text-[#B03052] ml-2 font-semibold ">Focus Mode</span>
+              <span className="text-[#B03052] ml-2 font-semibold ">
+                Focus Mode
+              </span>
             </div>
             {focusMode.isOpen ? (
-              <ChevronsUp size={18}  color="#B03052"/>
+              <ChevronsUp size={18} color="#B03052" />
             ) : (
-              <ChevronDown size={18}  color="#B03052"/>
+              <ChevronDown size={18} color="#B03052" />
             )}
           </div>
 
-          {/* ✅ Show FocusMode Inside Sidebar */}
           {focusMode.isOpen && <FocusMode />}
+
+          {/* ✅ Music spotify */}
+
+          <div
+            onClick={music.isOpen ? music.onClose : music.onOpen}
+            className="cursor-pointer flex items-center justify-between p-3 rounded-sm  hover:bg-neutral-300 dark:hover:bg-neutral-600 transition"
+          >
+            <div className="flex items-center text-sm">
+              <Music2 className="h-5 w-5 text-[#B03052]" />
+              <span className="text-[#B03052] ml-2 font-semibold ">Music</span>
+            </div>
+            {music.isOpen ? (
+              <ChevronsUp size={18} color="#B03052" />
+            ) : (
+              <ChevronDown size={18} color="#B03052" />
+            )}
+          </div>
+          {music.isOpen && <Music />}
 
           <Item label="Settings" icon={Settings} onClick={settings.onOpen} />
           <Item onClick={handleCreate} label="New page" icon={PlusCircle} />
